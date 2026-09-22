@@ -504,14 +504,6 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
 
   <div class="stat" id="nowStat"></div>
 
-  <div class="hdr"><div class="t">Needs deciding</div><div class="c" id="decCount"></div></div>
-  <p class="intro" style="font-size:15px;margin-top:10px">Open questions holding something up. Anyone can add
-    one, and tick it when it's settled.</p>
-  <div id="decList" style="margin-top:8px"></div>
-  <div class="addrow"><input placeholder="Add something that needs a decision…" id="decAdd" autocomplete="off" name="wr-dec">
-    <button id="decAddBtn">Add</button></div>
-  <div class="simbox" id="decSim" style="display:none"></div>
-
   <div class="hdr"><div class="t">Lately</div><div class="c">Everything the four of us have touched</div></div>
   <div class="act" id="actList"></div>
 </div></div>
@@ -579,7 +571,15 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
   <h2>No wrong answers, no explanations needed.</h2>
   <p class="intro">First instinct is the useful one. You'll see everyone's tallies as they come in.</p>
 
-  <div style="margin-top:40px" class="lbl">The name</div>
+  <div class="hdr" style="margin-top:40px"><div class="t">Needs deciding</div><div class="c" id="decCount"></div></div>
+  <p class="intro" style="font-size:15px;margin-top:10px">The blocking questions, not the creative ones below.
+    Anyone can add one, and tick it when it's settled.</p>
+  <div id="decList" style="margin-top:8px"></div>
+  <div class="addrow"><input placeholder="Add something that needs a decision…" id="decAdd" autocomplete="off" name="wr-dec">
+    <button id="decAddBtn">Add</button></div>
+  <div class="simbox" id="decSim" style="display:none"></div>
+
+  <div style="margin-top:52px" class="lbl">The name</div>
   <h2 style="font-size:24px">How far does Casteel go?</h2>
   <div class="rgrid" id="names"></div>
 
@@ -934,6 +934,17 @@ async function putShared(kind,key,value){
   else await DB.from('entries').upsert(row,{onConflict:'kind,key,author'});
   refresh();
 }
+function delBtn(kind,key,by){
+  if(!by) return '';
+  if(by!==ME && !isAdmin()) return '';
+  return '<button class="xbtn" data-delrow="'+kind+'|'+key+'|'+esc(by)+'" title="Delete">&times;</button>';
+}
+async function removeRow(kind,key,author){
+  if(!DB){ ROWS=ROWS.filter(r=>!(r.kind===kind&&r.key===key&&r.author===author));
+    localStorage.setItem('casteel-rows',JSON.stringify(ROWS)); render(); return; }
+  await DB.from('entries').delete().match({kind,key,author});
+  refresh();
+}
 const shared=(kind,key)=>{const r=ROWS.find(r=>r.kind===kind&&r.key===key&&r.author==='shared');return r?r.value:null;};
 const val=(kind,key,who)=>{const r=ROWS.find(r=>r.kind===kind&&r.key===key&&r.author===(who||ME));return r?r.value:null;};
 const all=(kind,key)=>ROWS.filter(r=>r.kind===kind&&r.key===key);
@@ -1197,6 +1208,7 @@ function renderLaunch(){
         +'<span class="lb">'+esc(r.lb)+(r.by?' <span style="color:var(--ink3);font-size:12.5px">· added by '+r.by+'</span>':'')+'</span>'
         +'<span class="who5">'+(who||'')+'</span>'
         +'<button class="cbtn '+(cn?'has':'')+'" data-open="'+r.key+'">'+(cn?cn+' note'+(cn>1?'s':''):'Note')+'</button>'
+        +delBtn('item',r.key,r.by)
         +'</div>'+(open.has(r.key)?cmBlock(r.key):'');
       d.appendChild(w);
     });
@@ -1401,7 +1413,8 @@ function renderNow(){
       +'<div class="dec'+(done?' done':'')+'"><span class="bx" data-dec="'+r.key+'"></span>'
       +'<span class="tx">'+esc(lb)+'</span>'
       +'<span class="by">'+r.author+'</span>'
-      +'<button class="cbtn '+(cn?'has':'')+'" data-open="'+r.key+'">'+(cn?cn+' note'+(cn>1?'s':''):'Note')+'</button></div>'
+      +'<button class="cbtn '+(cn?'has':'')+'" data-open="'+r.key+'">'+(cn?cn+' note'+(cn>1?'s':''):'Note')+'</button>'
+      +delBtn('decide',r.key,r.author)+'</div>'
       +(openC.has(r.key)?cmBlock(r.key):'')+'</div>';
   }).join('')||'<p class="intro" style="font-size:14.5px;color:var(--ink3)">Nothing open right now.</p>';
 
@@ -1425,7 +1438,8 @@ function renderTopics(){
       return '<div class="decwrap'+(openC.has(r.key)?' open':'')+'" data-k="'+r.key+'">'
         +'<div class="dec'+(dn?' done':'')+'"><span class="bx" data-top="'+r.key+'"></span>'
         +'<span class="tx">'+esc(r.lb)+(r.by?' <span style="color:var(--ink3);font-size:12.5px">· added by '+r.by+'</span>':'')+'</span>'
-        +'<button class="cbtn '+(cn?'has':'')+'" data-open="'+r.key+'">'+(cn?cn+' note'+(cn>1?'s':''):'Note')+'</button></div>'
+        +'<button class="cbtn '+(cn?'has':'')+'" data-open="'+r.key+'">'+(cn?cn+' note'+(cn>1?'s':''):'Note')+'</button>'
+        +delBtn('topic',r.key,r.by)+'</div>'
         +(openC.has(r.key)?cmBlock(r.key):'')+'</div>';
     }).join('');
 }
@@ -1493,6 +1507,9 @@ document.addEventListener('click',e=>{
   const dc=e.target.closest('[data-delconcept]');
   if(dc){if(confirm('Remove this concept for everyone?'))putShared('concept-def',dc.dataset.delconcept,'')
     ,DB&&DB.from('entries').delete().match({kind:'concept-def',key:dc.dataset.delconcept}).then(refresh); return;}
+  const dr=e.target.closest('[data-delrow]');
+  if(dr){const [kind,key,author]=dr.dataset.delrow.split('|');
+    if(confirm('Delete this for everyone?'))removeRow(kind,key,author); return;}
   if(e.target.closest('[data-clearnotice]')){putShared('notice','top',''); return;}
   if(e.target.id==='editmode'){
     EDIT=!EDIT;
