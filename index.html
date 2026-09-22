@@ -343,6 +343,12 @@ textarea:focus{outline:none;border-color:var(--steel-lt);background:#fff}
 .addrow input:focus{outline:none;border-color:var(--steel-lt);background:#fff}
 .addrow button{border:1px solid var(--rule);background:transparent;font-family:var(--sans);font-size:11.5px;
   letter-spacing:.1em;text-transform:uppercase;padding:0 16px;cursor:pointer;color:var(--ink3)}
+.simbox{margin-top:10px;border:1px solid var(--rule-soft);background:var(--paper2);padding:10px 13px}
+.simhead{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);margin-bottom:6px}
+.simrow{display:flex;gap:8px;align-items:baseline;padding:5px 0;font-size:13.5px;color:var(--ink2)}
+.simrow+.simrow{border-top:1px solid var(--rule-soft)}
+.simrow .simdone{color:var(--teal);font-size:12px;flex:0 0 auto}
+.simrow .simtx{flex:1}
 
 /* ---------- files ---------- */
 .link{display:block;text-align:center;border:1px solid var(--rule);color:var(--ink2);text-decoration:none;
@@ -432,7 +438,7 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
   <p>Everything here saves for everyone, live. Pick your name to start.</p>
   <div class="who" id="gateWho"></div>
   <div class="pin">
-    <input id="pin" type="password" placeholder="Team code" autocomplete="off">
+    <input id="pin" type="password" placeholder="Team code" autocomplete="off" name="wr-pin">
     <button class="btn" id="enter">Enter →</button>
   </div>
   <div class="err" id="err"></div>
@@ -480,8 +486,9 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
   <p class="intro" style="font-size:15px;margin-top:10px">Open questions holding something up. Anyone can add
     one, and tick it when it's settled.</p>
   <div id="decList" style="margin-top:8px"></div>
-  <div class="addrow"><input placeholder="Add something that needs a decision…" id="decAdd">
+  <div class="addrow"><input placeholder="Add something that needs a decision…" id="decAdd" autocomplete="off" name="wr-dec">
     <button id="decAddBtn">Add</button></div>
+  <div class="simbox" id="decSim" style="display:none"></div>
 
   <div class="hdr"><div class="t">Lately</div><div class="c">Everything the four of us have touched</div></div>
   <div class="act" id="actList"></div>
@@ -509,8 +516,9 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
   <p class="intro">One to four, open conversation, no schedule. This is the running list of what we want to get
     through. Add anything you want on it, and tick things off as we cover them in the room.</p>
   <div id="topics" style="margin-top:22px"></div>
-  <div class="addrow"><input placeholder="Add a topic or question for the session…" id="topAdd">
+  <div class="addrow"><input placeholder="Add a topic or question for the session…" id="topAdd" autocomplete="off" name="wr-topic">
     <button id="topAddBtn">Add</button></div>
+  <div class="simbox" id="topSim" style="display:none"></div>
 </div></div>
 
 <!-- 7 DIRECTIONS -->
@@ -620,8 +628,8 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
 
 <div class="bar"><div class="wrap">
   <div class="s"><span class="dotlive off" id="live"></span><span id="status">Connecting…</span></div>
-  <div class="r" id="meLabel"></div>
-  <div style="display:flex;gap:9px">
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="r" id="meLabel"></div>
     <button class="editbtn" id="editmode" style="display:none">Edit page</button>
     <button id="signout">Not you?</button>
   </div>
@@ -935,7 +943,7 @@ function renderDirections(){
       +'<div class="sub" style="min-height:auto;margin:4px 0 14px">'+esc(d.blurb)+'</div>'
       +'<div class="dreact">'
       +'<div class="scale4" data-dir="'+d.id+'">'+DSCALE.map((lb,n)=>'<button data-n="'+n+'" class="'+(mine.score===n?'on':'')+'">'+esc(lb)+'</button>').join('')+'</div>'
-      +'<div class="dword"><input type="text" placeholder="One word for how it feels (optional)" data-dirword="'+d.id+'" value="'+esc(mine.word||'')+'"></div>'
+      +'<div class="dword"><input type="text" placeholder="One word for how it feels (optional)" data-dirword="'+d.id+'" value="'+esc(mine.word||'')+'" autocomplete="off" name="wr-dirword-'+d.id+'"></div>'
       +'<div class="dtally">'+tally+'</div>'
       +(others.length?'<div class="dothers">'+others.map(o=>'<b>'+esc(o.author)+':</b> '+esc(DSCALE[o.score]!==undefined?DSCALE[o.score]:'—')+(o.word?' ('+esc(o.word)+')':'')).join('<br>')+'</div>':'')
       +'</div></div>';
@@ -1000,14 +1008,14 @@ function renderQ(){
       d.appendChild(el);
     });
     const add=document.createElement('div'); add.className='admrow adm flexrow';
-    add.innerHTML='<input placeholder="Add a question to '+esc(g[0])+'…" data-qadd="'+esc(g[0])+'">'
+    add.innerHTML='<input placeholder="Add a question to '+esc(g[0])+'…" data-qadd="'+esc(g[0])+'" autocomplete="off" name="wr-qadd">'
       +'<button data-qaddbtn="'+esc(g[0])+'">Add</button>';
     d.appendChild(add);
     host.appendChild(d);
   });
   const nd=document.createElement('div'); nd.className='admrow adm flexrow'; nd.style.marginTop='30px';
-  nd.innerHTML='<input placeholder="New section name" id="newGroup">'
-    +'<input placeholder="First question in it" id="newGroupQ">'
+  nd.innerHTML='<input placeholder="New section name" id="newGroup" autocomplete="off" name="wr-newgroup">'
+    +'<input placeholder="First question in it" id="newGroupQ" autocomplete="off" name="wr-newgroupq">'
     +'<button id="newGroupBtn">Add section</button>';
   host.appendChild(nd);
 }
@@ -1024,7 +1032,7 @@ function voteBox(kind,key){
 function cmBlock(key){
   const list=CMTS.filter(c=>c.key===key);
   return `<div class="cmts">${list.map(c=>`<div class="cm"><b>${c.author}</b>${esc(c.body)}</div>`).join('')}
-    <div class="cmadd"><input placeholder="Say why (optional)" data-cm="${key}"><button data-send="${key}">Add</button></div></div>`;
+    <div class="cmadd"><input placeholder="Say why (optional)" data-cm="${key}" autocomplete="off" name="wr-cm"><button data-send="${key}">Add</button></div></div>`;
 }
 function renderNames(){
   $('#names').innerHTML=NAMES.map((n,i)=>`<div class="card"><div class="cap">${n[0]}</div>
@@ -1043,9 +1051,9 @@ function renderConcepts(){
         +'<div class="sub">'+esc(c.sub||'')+'</div>'+voteBox('concept',c.k)+'</div>').join('')
     : '<div class="slot-empty">Nothing to look at yet</div>';
   const add=document.createElement('div'); add.className='adm'; add.style.gridColumn='1/-1';
-  add.innerHTML='<div class="admrow"><input placeholder="What is it (e.g. Wordmark direction A)" id="cCap">'
-    +'<input placeholder="Short note" id="cSub"></div>'
-    +'<div class="admrow"><input placeholder="Image URL (optional)" id="cImg">'
+  add.innerHTML='<div class="admrow"><input placeholder="What is it (e.g. Wordmark direction A)" id="cCap" autocomplete="off" name="wr-ccap">'
+    +'<input placeholder="Short note" id="cSub" autocomplete="off" name="wr-csub"></div>'
+    +'<div class="admrow"><input placeholder="Image URL (optional)" id="cImg" autocomplete="off" name="wr-cimg">'
     +'<button id="cAdd">Add concept</button></div>';
   host.appendChild(add);
 }
@@ -1080,6 +1088,51 @@ function statusOf(key){
   const raw=shared('status',key)||'';
   try{const o=JSON.parse(raw);return [o.s||'',o.by||''];}catch(e){return [raw,''];}
 }
+
+/* ---------------- duplicate-check while typing ---------------- */
+function decisionItems(){
+  return ROWS.filter(r=>r.kind==='decide').map(r=>{
+    let lb=r.value; try{lb=JSON.parse(r.value).lb||r.value;}catch(e){}
+    return {label:lb, done:!!shared('dec-done',r.key)};
+  });
+}
+function topicItems(){
+  const extra=ROWS.filter(r=>r.kind==='topic');
+  const rows=TOPICS.map((t,i)=>({key:'T'+i,lb:t}))
+    .concat(extra.map(r=>{let v=r.value;try{v=JSON.parse(r.value).lb;}catch(e){} return {key:r.key,lb:v};}));
+  return rows.map(r=>({label:r.lb, done:!!shared('t-done',r.key)}));
+}
+function launchItemsAll(){
+  const extra=ROWS.filter(r=>r.kind==='item');
+  const out=[];
+  LAUNCH.forEach((g,gi)=>{
+    const mine=extra.filter(r=>{try{return JSON.parse(r.value).cat===gi;}catch(e){return false;}});
+    const rows=g[1].map((lb,i)=>({key:'L'+gi+'-'+i,lb}))
+      .concat(mine.map(r=>{const v=JSON.parse(r.value);return{key:r.key,lb:v.lb};}));
+    rows.forEach(r=>out.push({label:r.lb, done:['done','cut'].includes(statusOf(r.key)[0])}));
+  });
+  return out;
+}
+function findSimilar(query,items){
+  const q=(query||'').trim().toLowerCase();
+  if(q.length<3) return [];
+  const words=q.split(/\s+/).filter(w=>w.length>2);
+  return items.map(it=>{
+    const low=it.label.toLowerCase();
+    let score=0;
+    if(low.includes(q)) score+=10;
+    words.forEach(w=>{ if(low.includes(w)) score+=1; });
+    return Object.assign({},it,{score});
+  }).filter(it=>it.score>0).sort((a,b)=>b.score-a.score).slice(0,4);
+}
+function renderSimBox(el,matches){
+  if(!el) return;
+  if(!matches.length){ el.style.display='none'; el.innerHTML=''; return; }
+  el.style.display='block';
+  el.innerHTML='<div class="simhead">Already on the list — check before adding another</div>'
+    +matches.map(m=>'<div class="simrow"><span class="simdone">'+(m.done?'✓':'')+'</span><span class="simtx">'+esc(m.label)+'</span></div>').join('');
+}
+function clearSim(el){ if(el){ el.style.display='none'; el.innerHTML=''; } }
 function renderLaunch(){
   const host=$('#launch');
   const open=new Set($$('.liwrap.open').map(e=>e.dataset.k));
@@ -1105,9 +1158,11 @@ function renderLaunch(){
       d.appendChild(w);
     });
     const add=document.createElement('div'); add.className='addrow';
-    add.innerHTML='<input placeholder="Add something we will need…" data-add="'+gi+'">'
+    add.innerHTML='<input placeholder="Add something we will need…" data-add="'+gi+'" autocomplete="off" name="wr-launch-'+gi+'">'
       +'<button data-addbtn="'+gi+'">Add</button>';
     d.appendChild(add);
+    const sim=document.createElement('div'); sim.className='simbox'; sim.style.display='none';
+    d.appendChild(sim);
     host.appendChild(d);
   });
 }
@@ -1248,16 +1303,16 @@ document.addEventListener('click',e=>{
   if(ob){ob.closest('.liwrap').classList.toggle('open'); renderLaunch(); return;}
   const ab=e.target.closest('[data-addbtn]');
   if(ab){const inp=document.querySelector('[data-add="'+ab.dataset.addbtn+'"]');
-    if(inp.value.trim()){put('item','i'+Date.now(),JSON.stringify({cat:+ab.dataset.addbtn,lb:inp.value.trim()}));inp.value='';}
+    if(inp.value.trim()){put('item','i'+Date.now(),JSON.stringify({cat:+ab.dataset.addbtn,lb:inp.value.trim()}));inp.value='';clearSim(inp.parentElement.nextElementSibling);}
     return;}
   const dtick=e.target.closest('[data-dec]');
   if(dtick){const k=dtick.dataset.dec; putShared('dec-done',k, shared('dec-done',k)?'':'1'); return;}
   const ttick=e.target.closest('[data-top]');
   if(ttick){const k=ttick.dataset.top; putShared('t-done',k, shared('t-done',k)?'':'1'); return;}
   if(e.target.id==='decAddBtn'){const i=$('#decAdd');
-    if(i.value.trim()){put('decide','d'+Date.now(),JSON.stringify({lb:i.value.trim()}));i.value='';} return;}
+    if(i.value.trim()){put('decide','d'+Date.now(),JSON.stringify({lb:i.value.trim()}));i.value='';clearSim($('#decSim'));} return;}
   if(e.target.id==='topAddBtn'){const i=$('#topAdd');
-    if(i.value.trim()){put('topic','t'+Date.now(),JSON.stringify({lb:i.value.trim()}));i.value='';} return;}
+    if(i.value.trim()){put('topic','t'+Date.now(),JSON.stringify({lb:i.value.trim()}));i.value='';clearSim($('#topSim'));} return;}
   const hq=e.target.closest('[data-hideq]');
   if(hq){const k=hq.dataset.hideq; putShared('q-hide',k, shared('q-hide',k)?'':'1'); return;}
   const qa=e.target.closest('[data-qaddbtn]');
@@ -1299,11 +1354,20 @@ document.addEventListener('keydown',e=>{
   if(e.key!=='Enter'||!e.target.dataset)return;
   if(e.target.dataset.cm){comment(e.target.dataset.cm,e.target.value);e.target.value='';}
   if(e.target.dataset.add!==undefined&&e.target.value.trim()){
-    put('item','i'+Date.now(),JSON.stringify({cat:+e.target.dataset.add,lb:e.target.value.trim()}));e.target.value='';}
+    put('item','i'+Date.now(),JSON.stringify({cat:+e.target.dataset.add,lb:e.target.value.trim()}));
+    clearSim(e.target.parentElement.nextElementSibling); e.target.value='';}
   if(e.target.id==='decAdd'&&e.target.value.trim()){
-    put('decide','d'+Date.now(),JSON.stringify({lb:e.target.value.trim()}));e.target.value='';}
+    put('decide','d'+Date.now(),JSON.stringify({lb:e.target.value.trim()})); e.target.value=''; clearSim($('#decSim'));}
   if(e.target.id==='topAdd'&&e.target.value.trim()){
-    put('topic','t'+Date.now(),JSON.stringify({lb:e.target.value.trim()}));e.target.value='';}
+    put('topic','t'+Date.now(),JSON.stringify({lb:e.target.value.trim()})); e.target.value=''; clearSim($('#topSim'));}
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.id==='decAdd'){ renderSimBox($('#decSim'), findSimilar(t.value, decisionItems())); return; }
+  if(t.id==='topAdd'){ renderSimBox($('#topSim'), findSimilar(t.value, topicItems())); return; }
+  if(t.dataset&&t.dataset.add!==undefined){
+    renderSimBox(t.parentElement.nextElementSibling, findSimilar(t.value, launchItemsAll())); return;
+  }
 });
 $$('.tab').forEach(t=>t.onclick=()=>{
   $$('.tab').forEach(x=>x.classList.remove('on')); t.classList.add('on');
