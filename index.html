@@ -189,6 +189,7 @@ h2{font-size:38px;font-weight:300;letter-spacing:-.03em;line-height:1.12;margin-
   text-transform:uppercase;padding-top:7px;flex:0 0 auto}
 .q .meta{font-style:normal;font-family:var(--sans);font-size:11.5px;color:var(--teal);margin-left:auto;
   padding-top:7px;white-space:nowrap;letter-spacing:.06em}
+.q .qnote{margin-top:6px;margin-bottom:0}
 .q .body{display:none;margin-top:14px;padding-left:2px}
 .q.open .body{display:block}
 .ans{border-left:2px solid var(--accent2);padding:2px 0 2px 14px;margin-bottom:14px}
@@ -601,6 +602,9 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
   <h2>Where everything lives.</h2>
   <p class="intro">Drop things in whenever you find them. No need to tell anyone or wait for the 25th.</p>
   <div class="rgrid" style="margin-top:34px">
+    <div class="card"><div class="cap">The Thinking Behind Casteel</div>
+      <div class="sub">Josh's own brand notes &mdash; mission, vision, ideal client, positioning, tagline candidates. The go-to reference for a lot of what's in here.</div>
+      <a class="link" href="casteel-brand-thinking.pdf" target="_blank" rel="noopener">Open PDF</a></div>
     <div class="card"><div class="cap">Drop folder</div>
       <div class="sub">Logos, old print pieces, photos. Nothing needs renaming or sorting.</div>
       <a class="link" id="lnkDrive" target="_blank" rel="noopener">Open folder</a></div>
@@ -700,13 +704,18 @@ const HOMEWORK=[
 ];
 
 const QUESTIONS=[
- ['The business',[['Why did you buy this firm?',1],['What do you want to be known for in five years?',1],
+ ['The business',[
+  ['Why did you buy this firm?',1,'Still open. Josh\u2019s brand doc flags the founder story as unwritten and as one of the biggest remaining differentiation opportunities \u2014 worth asking him directly.'],
+  ['What do you want to be known for in five years?',1,'Answered in Josh\u2019s brand doc: \u201cthe most trusted regional boutique financial planning firm\u2026 Growth matters. Trust matters more.\u201d'],
   ['What would you never change about how this firm works?',1],['What does a great year look like, in numbers and in feel?',0],
   ['What part of the work do you actually enjoy most?',0],['What part would you hand off tomorrow if you could?',0],
   ['What is the hardest thing about running this firm right now?',0],['If growth stopped entirely for two years, what would break first?',0],
-  ['What does the firm do that a client could not get elsewhere?',0],['What do you charge for that clients most often question?',0]]],
- ['The clients',[['Describe your favorite client without naming them.',1],
-  ['What do clients actually say when they refer you to someone?',1],['What do new clients usually get wrong about what you do?',0],
+  ['What does the firm do that a client could not get elsewhere?',0,'Answered in Josh\u2019s brand doc: \u201cfinancial craftsmanship\u201d and the confidence-business framing \u2014 we\u2019re not selling reports, we\u2019re selling clarity and confidence.'],
+  ['What do you charge for that clients most often question?',0]]],
+ ['The clients',[
+  ['Describe your favorite client without naming them.',1,'Partially answered \u2014 the teacher-and-carpenter story in Josh\u2019s brand doc.'],
+  ['What do clients actually say when they refer you to someone?',1,'Adjacent, not direct \u2014 Josh\u2019s doc lists what clients thank them for instead: reassurance, clarity, confidence, stability.'],
+  ['What do new clients usually get wrong about what you do?',0],
   ['What is the moment a prospect decides to trust you?',0],['Who have you turned away, and why?',0],
   ['Which client would you be most upset to lose, and what would cause it?',0],['What do your clients worry about at 2am?',0],
   ['How many of your clients\u2019 kids could name you?',0],['What happens to a client\u2019s money when they die? Does the next generation know you?',0],
@@ -720,7 +729,8 @@ const QUESTIONS=[
   ['What could you say that a competitor honestly could not?',0],['Is there anyone you would hate to be mistaken for?',0]]],
  ['The name and the brand',[['When you say Casteel out loud, what does it sound like to you?',0],
   ['What should someone feel in the first ten seconds on the website?',0],['What is the wrong impression to give?',0],
-  ['Should the brand feel local, regional, or neither?',0],['What of the Milinovich history matters enough to carry forward?',1],
+  ['Should the brand feel local, regional, or neither?',0],
+  ['What of the Milinovich history matters enough to carry forward?',1,'Partially answered — Josh’s doc roots the story in family ties to ironworking, coal mining, and the gas industry in southwestern PA, though it doesn’t address the Milinovich name specifically.'],
   ['If the firm were a building, what would it be made of?',0],['Is there anything you would be embarrassed to put in front of a client?',0]]],
  ['The team and the future',[['What are you best at that nobody sees?',0],['What does each person here do that clients love?',0],
   ['Who is going to run this firm in twenty years?',0],['What would you want a new hire to understand in week one?',0],
@@ -975,7 +985,7 @@ function renderQ(){
   const openKeys=new Set($$('.q.open').map(e=>e.dataset.k));
   host.innerHTML='';
   const added=ROWS.filter(r=>r.kind==='q-add');
-  const groups=QUESTIONS.map((g,gi)=>[g[0],g[1].map((q,qi)=>({key:'q'+gi+'-'+qi,t:q[0],star:q[1],own:false}))]);
+  const groups=QUESTIONS.map((g,gi)=>[g[0],g[1].map((q,qi)=>({key:'q'+gi+'-'+qi,t:q[0],star:q[1],note:q[2]||'',own:false}))]);
   added.forEach(r=>{
     let v; try{v=JSON.parse(r.value);}catch(e){return;}
     let gi=groups.findIndex(g=>g[0]===v.g);
@@ -998,6 +1008,7 @@ function renderQ(){
         +(answers.length?'<span class="meta">'+answers.length+' answer'+(answers.length>1?'s':'')+'</span>':'')
         +'<button class="xbtn adm inline" data-hideq="'+q.key+'" title="'+(hidden?'Bring back':'Retire')+'">'
         +(hidden?'&#8630;':'&times;')+'</button></div>'
+        +(q.note?'<div class="note qnote">'+esc(q.note)+'</div>':'')
         +'<div class="body">'
         +answers.filter(a=>a.author!==ME).map(a=>'<div class="ans"><div class="w">'+a.author+'</div><div class="t">'+esc(a.value)+'</div></div>').join('')
         +'<textarea placeholder="Your answer">'+esc(mine)+'</textarea>'
@@ -1125,11 +1136,17 @@ function findSimilar(query,items){
     return Object.assign({},it,{score});
   }).filter(it=>it.score>0).sort((a,b)=>b.score-a.score).slice(0,4);
 }
-function renderSimBox(el,matches){
+function browseAll(items){
+  // open items first, so the ones still worth checking against sit on top
+  const open=items.filter(it=>!it.done), done=items.filter(it=>it.done);
+  return open.concat(done).slice(0,8);
+}
+function renderSimBox(el,matches,browsing){
   if(!el) return;
   if(!matches.length){ el.style.display='none'; el.innerHTML=''; return; }
   el.style.display='block';
-  el.innerHTML='<div class="simhead">Already on the list — check before adding another</div>'
+  const head=browsing?'Everything already on this list — scan it before you add':'Already on the list — check before adding another';
+  el.innerHTML='<div class="simhead">'+head+'</div>'
     +matches.map(m=>'<div class="simrow"><span class="simdone">'+(m.done?'✓':'')+'</span><span class="simtx">'+esc(m.label)+'</span></div>').join('');
 }
 function clearSim(el){ if(el){ el.style.display='none'; el.innerHTML=''; } }
@@ -1348,6 +1365,17 @@ document.addEventListener('focusout',e=>{
     let obj={}; try{obj=cur?JSON.parse(cur):{};}catch(er){}
     const w=t.value.trim();
     if((obj.word||'')!==w){ obj.word=w; put('direction',id,JSON.stringify(obj)); }
+  }
+  if(t.id==='decAdd'&&!t.value.trim()){ clearSim($('#decSim')); }
+  if(t.id==='topAdd'&&!t.value.trim()){ clearSim($('#topSim')); }
+  if(t.dataset&&t.dataset.add!==undefined&&!t.value.trim()){ clearSim(t.parentElement.nextElementSibling); }
+});
+document.addEventListener('focusin',e=>{
+  const t=e.target;
+  if(t.id==='decAdd'&&!t.value.trim()){ renderSimBox($('#decSim'), browseAll(decisionItems()), true); }
+  if(t.id==='topAdd'&&!t.value.trim()){ renderSimBox($('#topSim'), browseAll(topicItems()), true); }
+  if(t.dataset&&t.dataset.add!==undefined&&!t.value.trim()){
+    renderSimBox(t.parentElement.nextElementSibling, browseAll(launchItemsAll()), true);
   }
 });
 document.addEventListener('keydown',e=>{
