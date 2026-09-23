@@ -173,14 +173,18 @@ h2{font-size:38px;font-weight:300;letter-spacing:-.03em;line-height:1.12;margin-
 .task.c h3 .mk{background:var(--mid)}
 .task .lead{font-size:15.5px;color:var(--ink2);margin-top:10px;max-width:64ch}
 .items{margin-top:18px}
-.chk{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--rule-soft);cursor:pointer}
-.chk .bx{width:16px;height:16px;border:1px solid var(--steel-lt);flex:0 0 auto;margin-top:4px;position:relative}
+.chkwrap{border-top:1px solid var(--rule-soft)}
+.chkwrap .cmts{margin:0 0 14px 28px}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:11px 0}
+.chk .bx{width:16px;height:16px;border:1px solid var(--steel-lt);flex:0 0 auto;margin-top:4px;position:relative;cursor:pointer}
 .chk.done .bx{background:var(--brass);border-color:var(--brass)}
 .chk.done .bx:after{content:"";position:absolute;left:4px;top:1px;width:5px;height:10px;border:solid #fff;
   border-width:0 1.6px 1.6px 0;transform:rotate(45deg)}
-.chk .tx{font-size:15px;color:var(--ink2);line-height:1.5;flex:1}
+.chk .tx{font-size:15px;color:var(--ink2);line-height:1.5;flex:1;cursor:pointer}
 .chk.done .tx{color:var(--ink3);text-decoration:line-through;text-decoration-color:var(--rule)}
 .chk .by{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);padding-top:4px;white-space:nowrap}
+.chk .cbtn{border:0;background:transparent;font-family:var(--sans);font-size:11.5px;color:var(--ink3);cursor:pointer;padding-top:4px}
+.chk .cbtn.has{color:var(--brass)}
 .note{margin-top:16px;font-size:13px;color:var(--ink3);border-left:2px solid var(--brass);padding-left:13px;max-width:60ch}
 
 /* ---------- questions ---------- */
@@ -246,63 +250,6 @@ textarea:focus{outline:none;border-color:var(--steel-lt);background:#fff}
 /* ---------- directions ---------- */
 .dblock{margin-top:44px}
 .dblock:first-child{margin-top:0}
-.dframe{border:1px solid var(--rule);border-radius:3px;overflow:hidden}
-.dwrap{padding:44px 38px 40px;min-height:300px;display:flex;flex-direction:column;font-family:var(--sans)}
-.dwrap .dnav{display:flex;align-items:baseline;gap:22px;margin-bottom:44px;flex-wrap:wrap}
-.dwrap .dmark{margin-right:auto}
-.dwrap .dnav a{text-decoration:none;color:inherit;opacity:.72;font-size:12px}
-.dwrap h3{margin:0 0 16px}
-.dwrap .dsub{margin:0 0 24px;max-width:44ch}
-.dwrap .dcta{display:inline-block;align-self:flex-start;margin-top:auto}
-.dph{position:relative;background:repeating-linear-gradient(135deg, rgba(0,0,0,.05) 0 2px, transparent 2px 9px)}
-.dph:after{content:attr(data-l);position:absolute;left:10px;bottom:8px;font-size:9.5px;letter-spacing:.05em;color:rgba(0,0,0,.42)}
-.d1{background:#F6F3EC;color:#1C1A17;font-family:Georgia,serif}
-.d1 .dmark{font-size:20px;font-weight:300;letter-spacing:.22em;text-transform:uppercase}
-.d1 .dnav a{font-family:Georgia,serif;letter-spacing:.04em}
-.d1 h3{font-size:42px;font-weight:300;line-height:1.1;letter-spacing:-.015em;max-width:15ch}
-.d1 .drule{height:1px;background:#1C1A17;opacity:.35;margin:0 0 22px;max-width:110px}
-.d1 .dsub{font-size:16px;font-weight:300;line-height:1.6;opacity:.78}
-.d1 .dcta{font-size:13px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid currentColor;padding-bottom:3px}
-.d1 .dph{height:88px;margin-top:26px;background-color:#EAE5DA}
-.d2{background:#1E2022;color:#E8E6E1;
-  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg, rgba(255,255,255,.045) 1px,transparent 1px);
-  background-size:48px 48px}
-.d2 .dmark{font-size:18px;font-weight:700;letter-spacing:-.02em}
-.d2 .dnav a{font-family:monospace;font-size:10.5px;letter-spacing:.05em;opacity:.6}
-.d2 h3{font-size:37px;font-weight:700;line-height:1.08;letter-spacing:-.025em;max-width:16ch}
-.d2 .dsub{font-family:monospace;font-size:12.5px;line-height:1.65;opacity:.66;max-width:50ch}
-.d2 .dcta{font-family:monospace;font-size:11.5px;letter-spacing:.05em;border:1px solid rgba(232,230,225,.4);padding:9px 18px}
-.d2 .dcontour{height:72px;margin-top:24px;opacity:.5}
-.d2 .dcontour svg{width:100%;height:100%;display:block}
-.d3{background:#EDE8DF;color:#2A2622}
-.d3 .dmark{font-family:Georgia,serif;font-size:19px;font-weight:700;letter-spacing:-.008em}
-.d3 .dnav a{font-size:12.5px;font-weight:500}
-.d3 h3{font-family:Georgia,serif;font-size:33px;font-weight:600;line-height:1.14;letter-spacing:-.01em;max-width:17ch}
-.d3 .dsub{font-size:14.5px;line-height:1.62;opacity:.8}
-.d3 .dcta{background:#4A5240;color:#EDE8DF;padding:11px 22px;font-weight:700;font-size:13px;border-radius:2px}
-.d3 .dph{height:130px;margin:0 0 24px;background-color:#DFD8CB;border-radius:2px}
-.d3 .dflow{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
-.d3 .dflow>div:first-child{flex:1.15;min-width:200px}
-.d3 .dflow>div:last-child{flex:1;min-width:160px}
-.d4{background:#F8F8F7;color:#121214}
-.d4 .dwrap{padding-top:52px}
-.d4 .dnav{margin-bottom:78px}
-.d4 .dmark{font-size:13.5px;font-weight:500;letter-spacing:.02em}
-.d4 .dnav a{font-size:11px;font-weight:400;opacity:.5}
-.d4 h3{font-size:25px;font-weight:200;line-height:1.3;letter-spacing:-.005em;max-width:26ch}
-.d4 .dsub{font-size:12.5px;font-weight:400;line-height:1.75;opacity:.45;max-width:40ch}
-.d4 .dcta{font-size:12px;font-weight:500;border-bottom:1px solid rgba(18,18,20,.25);padding-bottom:2px}
-.d4 .dhair{height:1px;background:rgba(18,18,20,.12);margin:44px 0 0}
-.d5{background:#DFE3E1;color:#22282B;position:relative}
-.d5 .dtopo{position:absolute;inset:0;opacity:.3;pointer-events:none}
-.d5 .dtopo svg{width:100%;height:100%;display:block}
-.d5 .dwrap{position:relative}
-.d5 .dmark{font-size:18px;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
-.d5 .dnav a{font-family:monospace;font-size:10px;letter-spacing:.03em;opacity:.65}
-.d5 h3{font-size:34px;font-weight:600;line-height:1.12;letter-spacing:-.008em;max-width:18ch}
-.d5 .dsub{font-family:monospace;font-size:11.5px;line-height:1.7;opacity:.72;max-width:48ch}
-.d5 .dcta{background:#22282B;color:#DFE3E1;font-family:monospace;font-size:11px;padding:9px 17px;letter-spacing:.03em}
-.d5 .dcoord{font-family:monospace;font-size:10px;opacity:.5;margin-top:20px}
 .dreact{padding:20px 0 0}
 .scale4{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;max-width:560px}
 .scale4 button{border:1px solid var(--rule);background:transparent;font-family:var(--sans);font-size:12.5px;
@@ -316,10 +263,6 @@ textarea:focus{outline:none;border-color:var(--steel-lt);background:#fff}
 .dothers{font-size:13px;color:var(--ink2);margin-top:6px;line-height:1.6}
 .dothers b{color:var(--ink);font-weight:500}
 @media (max-width:640px){
-  .dwrap{padding:28px 22px 26px}
-  .d1 h3{font-size:29px}.d2 h3{font-size:26px}.d3 h3{font-size:25px}.d4 h3{font-size:20px}.d5 h3{font-size:25px}
-  .d3 .dflow{flex-direction:column}
-  .d2 .dnav,.d4 .dnav{margin-bottom:36px}
   .scale4{grid-template-columns:repeat(2,1fr)}
 }
 
@@ -526,9 +469,7 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
 
   <div class="hdr"><div class="t">Topics for the 25th</div><div class="c">One to four, open conversation</div></div>
   <p class="intro" style="font-size:15px;margin-top:10px">No schedule. This is the running list of what we want
-    to get through. Add anything, tick things off as we cover them.</p>
-  <p class="intro">One to four, open conversation, no schedule. This is the running list of what we want to get
-    through. Add anything you want on it, and tick things off as we cover them in the room.</p>
+    to get through. Add anything you want on it, and tick things off as we cover them in the room.</p>
   <div id="topics" style="margin-top:22px"></div>
   <div class="addrow"><input placeholder="Add a topic or question for the session…" id="topAdd" autocomplete="off" name="wr-topic">
     <button id="topAddBtn">Add</button></div>
@@ -538,11 +479,11 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
 <!-- 7 DIRECTIONS -->
 <div class="panel" id="p7"><div class="wrap">
   <div class="lbl">Five directions</div>
-  <h2>Same words, five different worlds.</h2>
-  <p class="intro">Everything below is the same information, laid out and dressed five different ways. Go fast.
-    First instinct is the useful one, and thinking about it usually makes the answer worse. Nobody is choosing a
-    final design here; this tells the identity designer which world feels closest. Copy shown is placeholder,
-    not proposed messaging.</p>
+  <h2>Five different worlds.</h2>
+  <p class="intro">Each direction below is a real-world territory, not a mockup we made up. React to the actual
+    brands and work, not a template with the colors swapped. Go fast. First instinct is the useful one, and
+    thinking about it usually makes the answer worse. Nobody is choosing a final design here; this tells the
+    identity designer which world feels closest.</p>
   <div id="directions" style="margin-top:34px"></div>
 </div></div>
 
@@ -621,7 +562,7 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
 <div class="panel" id="p5"><div class="wrap">
   <div class="lbl">Files and links</div>
   <h2>Where everything lives.</h2>
-  <p class="intro">Drop things in whenever you find them. No need to tell anyone or wait for the 25th.</p>
+  <p class="intro">Drop things in whenever you find them. No need to tell anyone or wait for anything.</p>
   <div class="rgrid" style="margin-top:34px">
     <div class="card private" id="exportCard"><div class="cap">Export everything</div>
       <div class="sub">Every answer, note, vote, and open item in this room, as one plain-text file. Download it, then hand it to Claude to read through and work with.</div>
@@ -638,9 +579,6 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
     <div class="card"><div class="cap">Client data</div>
       <div class="sub">CRM exports. Bands and ranges are fine, no client names needed.</div>
       <a class="link" id="lnkData" target="_blank" rel="noopener">Open folder</a></div>
-    <div class="card"><div class="cap">Discovery Guide</div>
-      <div class="sub">Agenda and prep notes for the Friday session and the founder interview, as a live doc.</div>
-      <a class="link" href="https://claude.ai/artifact/FpVhNwqtj8pYeFieRky2YY" target="_blank" rel="noopener">Open doc</a></div>
   </div>
   <div style="margin-top:50px" class="lbl">How this works</div>
   <h2 style="font-size:24px">Three things worth knowing.</h2>
@@ -650,7 +588,7 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
     <div class="howto"><b>Nobody owns a section.</b> If you have an opinion on something, add it even if someone
       already answered. Disagreement is useful.</div>
     <div class="howto"><b>Heidi can see it any time.</b> So there's no need to tell her you've done something,
-      and no deadline other than the 25th.</div>
+      and nothing here has a hard deadline beyond the timeline up top.</div>
   </div>
 </div></div>
 
@@ -688,12 +626,18 @@ const CONCEPTS = [];
 const DESCRIPTORS=['Wealth Management','Wealth Advisors','Wealth Partners','Financial','and Co.','Wealth Group'];
 
 const PHASES=[
- ['Now','Sep 11 to 24','Answer, gather, and clear the name','2026-09-11'],
- ['Sep 25','Discovery','Four hours together on the business','2026-09-25'],
- ['October','Positioning','Message, identity direction, photography','2026-09-26'],
- ['November','Build','Website, collateral, and print in production','2026-11-01'],
- ['December','Approvals','Review, proof, print, and prepare clients','2026-12-01'],
- ['January 1','Launch','Casteel everywhere at once','2026-12-29']
+ ['Now','Sep 11 to 24','Answer, gather, and clear the name','2026-09-11',
+   'Between now and Friday: answer what you can, drop files in, and add anything to the launch list that we will need.'],
+ ['Sep 25','Discovery','Four hours together on the business','2026-09-25',
+   'Today is the discovery session. Log answers and homework as they come up, here or after.'],
+ ['October','Positioning','Message, identity direction, photography','2026-09-26',
+   'Positioning and creative direction: react to the five directions, weigh in on names and color, and keep dropping assets in as you find them.'],
+ ['November','Build','Website, collateral, and print in production','2026-11-01',
+   'Build phase: website, collateral, and print moving into production. Flag anything blocking here.'],
+ ['December','Approvals','Review, proof, print, and prepare clients','2026-12-01',
+   'Review and approvals: proof everything, prepare clients for the change, and settle whatever is still open before launch.'],
+ ['January 1','Launch','Casteel everywhere at once','2026-12-29',
+   'Casteel launches. Use this to track anything still trailing behind.']
 ];
 
 const TOPICS=[
@@ -701,11 +645,14 @@ const TOPICS=[
  'What a great year looks like, in numbers and in feel',
  'The best clients, and what they have in common',
  'Who the firm wants more of, and whether there is a minimum',
+ 'How clients actually arrive, channel by channel, not just referrals',
+ 'What the firm actually does day to day, in specifics',
  'Where referrals actually come from',
  'The professional relationships worth building on',
  'Next-generation relationships and what happens at transfer',
  'How far Casteel should reach geographically',
  'What of the Milinovich history carries forward',
+ 'Tim and Hayley’s view, asked directly, not just Joshuah’s',
  'Name clearance status and anything blocking January 1',
  'What has to be true on launch day, and what can follow',
  'Budget ceiling for outside costs',
@@ -713,6 +660,13 @@ const TOPICS=[
  'Who approves work, and who can publish',
  'What each of you wants marketing to do for you',
  'What everyone is most worried about'
+];
+
+const DECISIONS=[
+ ['Suffix: Financial, Wealth Management, or Asset Management (spelling is settled — Casteel)','Blocks domains, entity filing, and every piece of design work'],
+ ['January 1 holds: a simple landing page, LinkedIn, and stationery live that day, full site continuing into Q1','Get Joshuah’s buy-in Friday, especially on budget and capacity — if scope creeps past “simple,” this date is what breaks'],
+ ['Service tiers: Joshuah hands over the document he held back','Determines what the homepage leads with'],
+ ['Client-base analysis: Joshuah commits to a date, ideally two weeks out','Drives the niche decision, which drives everything else']
 ];
 
 /* ---------------- content ---------------- */
@@ -755,7 +709,7 @@ const QUESTIONS=[
   ['What should someone feel in the first ten seconds on the website?',0],['What is the wrong impression to give?',0],
   ['Should the brand feel local, regional, or neither?',0],
   ['What of the Milinovich history matters enough to carry forward?',1,'Partially answered — Josh’s doc roots the story in family ties to ironworking, coal mining, and the gas industry in southwestern PA, though it doesn’t address the Milinovich name specifically.'],
-  ['If the firm were a building, what would it be made of?',0],['Is there anything you would be embarrassed to put in front of a client?',0]]],
+  ['Is there anything you would be embarrassed to put in front of a client?',0]]],
  ['The team and the future',[['What are you best at that nobody sees?',0],['What does each person here do that clients love?',0],
   ['Who is going to run this firm in twenty years?',0],['What would you want a new hire to understand in week one?',0],
   ['What is the thing you keep meaning to fix and never do?',0],['What would make the January 1 launch feel like a win to you?',0]]],
@@ -768,9 +722,6 @@ const QUESTIONS=[
   ['If this firm were a vehicle, what is it? Be specific, make and model if you can picture it. Why that one?',0],
   ['If you gave every new client one physical object on the day they signed on, what would it be? Not paperwork, something they’d actually keep.',0],
   ['What’s in this firm’s toolbox that other firms around here don’t carry?',0]]],
- ['Over the fence',[
-  ['A client is standing at the fence talking to their neighbor about you. What do you want them to say, in their own words?',0],
-  ['Now, honestly: what do you think they actually say right now? It’s fine if it’s the same. It’s more useful if it isn’t.',0]]],
  ['Waynesburg, specifically',[
   ['What’s the most Waynesburg thing about this firm?',0],
   ['Who from around here, living or dead, would you want a picture of on the office wall? Why them?',0],
@@ -809,44 +760,33 @@ const BRANDREFS=[
 ];
 
 const DSCALE=["No","Not really","Interesting","Yes, that's us"];
-const DHEAD="Financial planning for families across southwestern Pennsylvania.";
-const DSUB="Investments, retirement, tax, and estate planning.";
-const DCTA="Start a conversation";
-const DNAV=["Approach","Team","Insights","Contact"];
-const dnavHTML=DNAV.map(n=>'<a href="#" onclick="return false">'+n+'</a>').join('');
-const dcontour=(stroke)=>'<svg viewBox="0 0 800 120" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="'+stroke+'" stroke-width="1">'
-  +'<path d="M0 108 C 120 92, 200 96, 300 80 S 520 52, 640 58 S 760 44, 800 38"/>'
-  +'<path d="M0 92 C 130 74, 210 80, 310 62 S 520 34, 646 40 S 764 26, 800 20"/>'
-  +'<path d="M0 76 C 140 56, 220 64, 320 44 S 520 16, 652 22 S 768 8, 800 2"/>'
-  +'<path d="M0 60 C 150 38, 230 48, 330 26"/><path d="M0 44 C 160 20, 240 32, 340 8"/></g></svg>';
-const dtopo='<svg viewBox="0 0 900 560" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="#22282B" stroke-width="1">'
-  +'<path d="M-20 470 C 140 440, 250 452, 380 410 S 640 330, 780 348 S 900 300, 940 286"/>'
-  +'<path d="M-20 430 C 150 396, 264 410, 396 366 S 648 288, 790 306 S 900 258, 940 244"/>'
-  +'<path d="M-20 390 C 160 352, 278 368, 412 322 S 656 246, 800 264 S 900 216, 940 202"/>'
-  +'<path d="M-20 350 C 170 308, 292 326, 428 278 S 664 204, 810 222"/>'
-  +'<path d="M-20 310 C 180 264, 306 284, 444 234 S 672 162, 820 180"/>'
-  +'<path d="M-20 270 C 190 220, 320 242, 460 190 S 680 120, 830 138"/>'
-  +'<path d="M-20 230 C 200 176, 334 200, 476 146"/><path d="M-20 190 C 210 132, 348 158, 492 102"/></g></svg>';
 
 const DIRECTIONS=[
  {id:'editorial',name:'Editorial Quarterly',blurb:'Warm ivory paper, quiet serif type, generous white space.',
-  html:'<div class="dwrap d1"><div class="dnav"><span class="dmark">Casteel</span>'+dnavHTML+'</div><div class="drule"></div>'
-    +'<h3>'+DHEAD+'</h3><p class="dsub">'+DSUB+'</p><span class="dcta">'+DCTA+'</span><div class="dph" data-l="Photography"></div></div>'},
+  refs:[
+   ['Kinfolk magazine','Negative space and a restrained palette carry the whole page. Nothing shouts.'],
+   ['The Gentlewoman','Big serif headlines, real portraits, editorial pacing instead of a grid of stock photos.'],
+   ['Aman (hotels)','One word, enormous quiet, almost no colour. Confidence through restraint.']]},
  {id:'structural',name:'Structural',blurb:'Dark, gridded, engineering precision. Steel felt, never spelled out.',
-  html:'<div class="dwrap d2"><div class="dnav"><span class="dmark">Casteel</span>'+dnavHTML+'</div>'
-    +'<h3>'+DHEAD+'</h3><p class="dsub">'+DSUB+'</p><span class="dcta">'+DCTA+'</span><div class="dcontour">'+dcontour('#E8E6E1')+'</div></div>'},
+  refs:[
+   ['Snøhetta','Monochrome, architectural grids, and a sans wordmark that reads like signage.'],
+   ['Arup','Dense technical confidence. The design earns its precision instead of decorating it.'],
+   ['Foster + Partners','A plus sign as the only mark. Engineering precision, not decoration.']]},
  {id:'warm',name:'Warm American',blurb:'Olive and stone, confident serif, a photo doing real work.',
-  html:'<div class="dwrap d3"><div class="dnav"><span class="dmark">Casteel</span>'+dnavHTML+'</div>'
-    +'<div class="dflow"><div><h3>'+DHEAD+'</h3><p class="dsub">'+DSUB+'</p><span class="dcta">'+DCTA+'</span></div>'
-    +'<div><div class="dph" data-l="Photography"></div></div></div></div>'},
+  refs:[
+   ['Red Wing Shoes','American craft heritage told through materials and photography, not nostalgia.'],
+   ['Garden & Gun','Regional pride made sophisticated. Warm tones, real place, no cliché.'],
+   ['Aime Leon Dore','Heritage American style shot like a lookbook, never like a catalogue.']]},
  {id:'quiet',name:'Quiet Modern',blurb:'Almost nothing. Thin type, huge margins, total restraint.',
-  html:'<div class="dwrap d4"><div class="dnav"><span class="dmark">Casteel</span>'+dnavHTML+'</div>'
-    +'<h3>'+DHEAD+'</h3><p class="dsub">'+DSUB+'</p><span class="dcta">'+DCTA+'</span><div class="dhair"></div></div>'},
+  refs:[
+   ['Aesop','Clinical, minimal, and consistent everywhere, from packaging to the website.'],
+   ['COS','Fashion-brand restraint: thin type, huge margins, colour used like punctuation.'],
+   ['Jil Sander','The absence of ornament is the entire brand statement.']]},
  {id:'field',name:'Field Notes',blurb:'Topographic, mineral, rooted in Greene County ground.',
-  html:'<div class="d5"><div class="dtopo">'+dtopo+'</div><div class="dwrap">'
-    +'<div class="dnav"><span class="dmark">Casteel</span>'+dnavHTML+'</div>'
-    +'<h3>'+DHEAD+'</h3><p class="dsub">'+DSUB+'</p><span class="dcta">'+DCTA+'</span>'
-    +'<div class="dcoord">Waynesburg, Pennsylvania · 39.8968° N, 80.1806° W</div></div></div>'}
+  refs:[
+   ['USGS topographic maps','Contour lines and survey marks as a visual language, not a background texture.'],
+   ['Field Notes (the stationery brand)','Utilitarian, American-made, printed like a tool rather than a keepsake.'],
+   ['National Park Service wayfinding','Confident type and mineral colour built for a real place, not a mood board.']]}
 ];
 
 const LAUNCH=[
@@ -982,10 +922,11 @@ function renderDirections(){
     const tally=DSCALE.map((lb,n)=>{const c=rows.filter(r=>r.score===n).length;return c?c+' '+lb:null;}).filter(Boolean).join(' · ');
     const others=rows.filter(r=>r.author!==ME && (r.score!==undefined || r.word));
     const wrap=document.createElement('div'); wrap.className='dblock';
-    wrap.innerHTML='<div class="dframe">'+d.html+'</div>'
-      +'<div style="padding:20px 2px 0">'
-      +'<div class="cap" style="font-size:16px">'+esc(d.name)+'</div>'
-      +'<div class="sub" style="min-height:auto;margin:4px 0 14px">'+esc(d.blurb)+'</div>'
+    wrap.innerHTML='<div class="cap" style="font-size:16px">'+esc(d.name)+'</div>'
+      +'<div class="sub" style="min-height:auto;margin:4px 0 16px">'+esc(d.blurb)+'</div>'
+      +'<div class="rgrid" style="margin-top:0">'
+      +d.refs.map(r=>'<div class="card"><div class="cap">'+esc(r[0])+'</div><div class="sub">'+esc(r[1])+'</div></div>').join('')
+      +'</div>'
       +'<div class="dreact">'
       +'<div class="scale4" data-dir="'+d.id+'">'+DSCALE.map((lb,n)=>'<button data-n="'+n+'" class="'+(mine.score===n?'on':'')+'">'+esc(lb)+'</button>').join('')+'</div>'
       +'<div class="dword"><input type="text" placeholder="One word for how it feels (optional)" data-dirword="'+d.id+'" value="'+esc(mine.word||'')+'" autocomplete="off" name="wr-dirword-'+d.id+'"></div>'
@@ -997,19 +938,23 @@ function renderDirections(){
 }
 
 function renderHW(){
-  const host=$('#hw'); host.innerHTML='';
+  const host=$('#hw');
+  const openC=new Set($$('.chkwrap.open').map(e=>e.dataset.k));
+  host.innerHTML='';
   HOMEWORK.forEach((t,ti)=>{
     const d=document.createElement('div'); d.className='task '+t[0];
     d.innerHTML=`<div class="n">${t[1]}</div><h3><span class="mk"></span>${t[2]}</h3>
       <p class="lead">${t[3]}</p><div class="items"></div>${t[5]?`<div class="note">${t[5]}</div>`:''}`;
     const box=d.querySelector('.items');
     t[4].forEach((item,ii)=>{
-      const key='hw'+ti+'-'+ii, done=all('check',key);
-      const el=document.createElement('div'); el.className='chk'+(done.length?' done':'');
-      el.innerHTML=`<span class="bx"></span><span class="tx">${item}</span>
-        <span class="by">${done.length?done.map(x=>x.author).join(', '):''}</span>`;
-      el.onclick=()=>put('check',key, val('check',key)?null:'1');
-      box.appendChild(el);
+      const key='hw'+ti+'-'+ii, done=all('check',key), cn=CMTS.filter(c=>c.key===key).length;
+      const wrap=document.createElement('div'); wrap.className='chkwrap'+(openC.has(key)?' open':''); wrap.dataset.k=key;
+      wrap.innerHTML='<div class="chk'+(done.length?' done':'')+'">'
+        +'<span class="bx" data-hwbox="'+key+'"></span><span class="tx" data-hwbox="'+key+'">'+item+'</span>'
+        +'<span class="by">'+(done.length?done.map(x=>x.author).join(', '):'')+'</span>'
+        +'<button class="cbtn '+(cn?'has':'')+'" data-open="'+key+'">'+(cn?cn+' note'+(cn>1?'s':''):'Note')+'</button></div>'
+        +(openC.has(key)?cmBlock(key,'Add a detail…'):'');
+      box.appendChild(wrap);
     });
     host.appendChild(d);
   });
@@ -1139,10 +1084,10 @@ function statusOf(key){
 
 /* ---------------- duplicate-check while typing ---------------- */
 function decisionItems(){
-  return ROWS.filter(r=>r.kind==='decide').map(r=>{
-    let lb=r.value; try{lb=JSON.parse(r.value).lb||r.value;}catch(e){}
-    return {label:lb, done:!!shared('dec-done',r.key)};
-  });
+  const extra=ROWS.filter(r=>r.kind==='decide');
+  const rows=DECISIONS.map((t,i)=>({key:'D'+i,lb:t[0]}))
+    .concat(extra.map(r=>{let v=r.value;try{v=JSON.parse(r.value).lb;}catch(e){} return {key:r.key,lb:v};}));
+  return rows.map(r=>({label:r.lb, done:!!shared('dec-done',r.key)}));
 }
 function topicItems(){
   const extra=ROWS.filter(r=>r.kind==='topic');
@@ -1324,8 +1269,9 @@ function exportAll(){
   p('');
 
   p('========== OPEN DECISIONS =========='); p('');
-  ROWS.filter(r=>r.kind==='decide').forEach(r=>{ let v=r.value; try{v=JSON.parse(r.value).lb;}catch(e){}
-    p('  ['+(shared('dec-done',r.key)?'x':' ')+'] '+v+'  (raised by '+r.author+')'); });
+  const decExtra2=ROWS.filter(r=>r.kind==='decide');
+  DECISIONS.map((t,i)=>({key:'D'+i,lb:t[0],by:null})).concat(decExtra2.map(r=>{let v=r.value;try{v=JSON.parse(r.value).lb;}catch(e){} return {key:r.key,lb:v,by:r.author};}))
+    .forEach(t=>p('  ['+(shared('dec-done',t.key)?'x':' ')+'] '+t.lb+(t.by?'  (raised by '+t.by+')':'')));
   p('');
 
   p('========== LAUNCH / BUILD LIST =========='); p('');
@@ -1372,7 +1318,7 @@ function renderFocus(){
   let cur=0; PHASES.forEach((p,i)=>{ if(today>=d(p[3])) cur=i; });
   const note=shared('notice','top')||'';
   $('#fVal').textContent = note || PHASES[cur][2]+'.';
-  const openDec=ROWS.filter(r=>r.kind==='decide'&&!shared('dec-done',r.key)).length;
+  const openDec=decisionItems().filter(r=>!r.done).length;
   const todo=24-new Set(ROWS.filter(r=>r.kind==='check').map(r=>r.key)).size;
   $('#fDec').textContent=openDec;
   $('#fTodo').textContent=todo;
@@ -1385,7 +1331,7 @@ function renderNow(){
   let cur=0; PHASES.forEach((p,i)=>{ if(today>=d(p[3])) cur=i; });
   const note=shared('notice','top')||'';
   $('#nowHead').textContent=PHASES[cur][1]==='Discovery'?'Discovery day.':PHASES[cur][2]+'.';
-  $('#nowLine').textContent = note || 'Between now and the 25th: answer what you can, drop files in, and add anything to the launch list that we will need.';
+  $('#nowLine').textContent = note || PHASES[cur][4];
 
   const hwDone=new Set(ROWS.filter(r=>r.kind==='check').map(r=>r.key)).size;
   const hwTotal=HOMEWORK.reduce((n,t)=>n+t[4].length,0);
@@ -1402,19 +1348,20 @@ function renderNow(){
     +'<div><div class="v">'+lDone+'<span style="font-size:16px;color:var(--ink3)"> / '+lTotal+'</span></div><div class="k">Launch items settled</div></div>'
     +'<div><div class="v">'+gut+'<span style="font-size:16px;color:var(--ink3)"> / '+gutTotal+'</span></div><div class="k">Gut checks logged</div></div>';
 
-  const items=ROWS.filter(r=>r.kind==='decide');
+  const decExtra=ROWS.filter(r=>r.kind==='decide');
+  const items=DECISIONS.map((t,i)=>({key:'D'+i,lb:t[0],note:t[1],by:null}))
+    .concat(decExtra.map(r=>{let v=r.value;try{v=JSON.parse(r.value).lb;}catch(e){}return {key:r.key,lb:v,note:null,by:r.author};}));
   const open=items.filter(r=>!shared('dec-done',r.key)).length;
   $('#decCount').textContent=items.length?open+' open of '+items.length:'nothing yet';
   const openC=new Set($$('.decwrap.open').map(e=>e.dataset.k));
   $('#decList').innerHTML=items.map(r=>{
-    let lb=r.value; try{lb=JSON.parse(r.value).lb||r.value;}catch(e){}
     const done=!!shared('dec-done',r.key), cn=CMTS.filter(c=>c.key===r.key).length;
     return '<div class="decwrap'+(openC.has(r.key)?' open':'')+'" data-k="'+r.key+'">'
       +'<div class="dec'+(done?' done':'')+'"><span class="bx" data-dec="'+r.key+'"></span>'
-      +'<span class="tx">'+esc(lb)+'</span>'
-      +'<span class="by">'+r.author+'</span>'
+      +'<span class="tx">'+esc(r.lb)+(r.note?' <span style="color:var(--ink3);font-size:12.5px">— '+esc(r.note)+'</span>':'')+'</span>'
+      +'<span class="by">'+(r.by||'')+'</span>'
       +'<button class="cbtn '+(cn?'has':'')+'" data-open="'+r.key+'">'+(cn?cn+' note'+(cn>1?'s':''):'Note')+'</button>'
-      +delBtn('decide',r.key,r.author)+'</div>'
+      +delBtn('decide',r.key,r.by)+'</div>'
       +(openC.has(r.key)?cmBlock(r.key):'')+'</div>';
   }).join('')||'<p class="intro" style="font-size:14.5px;color:var(--ink3)">Nothing open right now.</p>';
 
@@ -1475,8 +1422,10 @@ document.addEventListener('click',e=>{
   if(stb){const k=stb.dataset.st, cur=statusOf(k)[0];
     const next=STATES[(STATES.indexOf(cur)+1)%STATES.length];
     putShared('status',k, next?JSON.stringify({s:next,by:ME}):''); return;}
+  const hwb=e.target.closest('[data-hwbox]');
+  if(hwb){const k=hwb.dataset.hwbox; put('check',k, val('check',k)?null:'1'); return;}
   const ob=e.target.closest('[data-open]');
-  if(ob){ob.closest('.liwrap').classList.toggle('open'); renderLaunch(); return;}
+  if(ob){const wrap=ob.closest('[data-k]'); if(wrap){wrap.classList.toggle('open'); render();} return;}
   const ab=e.target.closest('[data-addbtn]');
   if(ab){const inp=document.querySelector('[data-add="'+ab.dataset.addbtn+'"]');
     if(inp.value.trim()){put('item','i'+Date.now(),JSON.stringify({cat:+ab.dataset.addbtn,lb:inp.value.trim()}));inp.value='';clearSim(inp.parentElement.nextElementSibling);}
