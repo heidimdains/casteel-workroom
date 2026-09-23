@@ -144,7 +144,8 @@ h2{font-size:38px;font-weight:300;letter-spacing:-.03em;line-height:1.12;margin-
 .facts .k{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--steel-lt)}
 .facts .v{font-size:17px;margin-top:5px}
 .tabs{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:1px solid var(--rule)}
-.tabs .wrap{display:flex;overflow-x:auto}
+.tabs .wrap{display:flex;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tabs .wrap::-webkit-scrollbar{display:none}
 .tab{border:0;background:transparent;font-family:var(--sans);font-size:12px;font-weight:500;letter-spacing:.16em;
   text-transform:uppercase;color:var(--ink3);padding:19px 24px 17px;cursor:pointer;white-space:nowrap;
   border-bottom:2px solid transparent;margin-bottom:-1px}
@@ -215,6 +216,10 @@ textarea:focus{outline:none;border-color:var(--steel-lt);background:#fff}
 /* ---------- gut checks ---------- */
 .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:20px;margin-top:32px}
 .card{border:1px solid var(--rule-soft);background:var(--paper2);padding:18px}
+.refcard .refimg{height:64px;display:flex;align-items:center;justify-content:flex-start;margin-bottom:12px}
+.refcard .refimg img{max-height:100%;max-width:100%;object-fit:contain;filter:grayscale(1);opacity:.85}
+.reflink{font-size:12px;color:var(--steel);text-decoration:none;margin-left:4px}
+.reflink:hover{color:var(--ink)}
 .card.private{border:1px solid var(--brass);background:var(--ink);color:var(--paper)}
 .card.private .cap{color:var(--paper)}
 .card.private .sub{color:#D8D2C6}
@@ -231,7 +236,9 @@ textarea:focus{outline:none;border-color:var(--steel-lt);background:#fff}
 .vote button.on.no{background:var(--ink);border-color:var(--ink);color:#fff}
 .vote button.on.maybe{background:var(--paper3);border-color:var(--steel-lt);color:var(--ink2)}
 .tally{font-size:11.5px;color:var(--steel);margin-top:9px;min-height:17px;letter-spacing:.04em}
-.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(146px,1fr));gap:15px;margin-top:28px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(146px,1fr));gap:15px;margin-top:12px;margin-bottom:8px}
+.swgrp{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-top:26px}
+.swgrp:first-child{margin-top:0}
 .sw{cursor:pointer;border:1px solid transparent;padding:6px}
 .sw .chipc{height:84px;display:block}
 .sw .nm{font-size:12px;color:var(--ink2);margin-top:7px;display:flex;justify-content:space-between}
@@ -526,8 +533,8 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
 
   <div style="margin-top:52px" class="lbl">Color</div>
   <h2 style="font-size:24px">Which of these feel like the firm?</h2>
-  <p class="intro" style="font-size:15px">Not a proposed palette. Tap once for yes, twice for no. Instinct only.</p>
-  <div class="swatches" id="swatches"></div>
+  <p class="intro" style="font-size:15px">Not a proposed palette. These are pulled from the actual brands in the Directions tab, grouped by territory, so a reaction is grounded in something real rather than a colour picked in isolation. Tap once for yes, twice for no. Instinct only.</p>
+  <div id="swatches"></div>
 
   <div style="margin-top:52px" class="lbl">Personality</div>
   <h2 style="font-size:24px">Where should Casteel sit?</h2>
@@ -678,7 +685,7 @@ const HOMEWORK=[
   ['Household list with tenure, age band, asset band','Services each household actually uses','Geography by town or county','How each relationship originated, where it is known','New clients in the last 24 months and their source','Clients lost in the last three years, and why','Households with a next-generation relationship already','The ten households you would happily clone'],
   'Bands and ranges are fine. No client names are needed for any of this.'],
  ['c','03','Gather assets and access','Half of this is finding out what still exists. The other half is making sure we can get into the accounts when it is time to change them.',
-  ['Logo files in whatever formats survive','Printed materials: folders, cards, letterhead','Existing photography of the team or office','Bios, credentials, designations, headshots','Website login and who hosts the domain','Google Analytics and Business Profile access','LinkedIn page admin and personal profiles','Email platform and CRM, and who administers each'],'']
+  ['Logo files in whatever formats survive','Printed materials: folders, cards, letterhead','Existing photography of the team or office','Bios, credentials, designations, headshots','Website login and who hosts the domain','Google Analytics and Business Profile access','LinkedIn page admin and personal profiles','Email platform and CRM, and who administers each','The service-tier document Joshuah held back','A list of the firms he thinks of as competitors'],'']
 ];
 
 const QUESTIONS=[
@@ -732,9 +739,13 @@ const NAMES=[['Casteel Wealth Management','The name as proposed'],['Casteel Weal
  ['Casteel Financial','Broader, plainer'],['Casteel and Co.','Echoes Milinovich and Co.'],
  ['Casteel Wealth Partners','Implies a team'],['Casteel','Name alone, no descriptor']];
 
-const SWATCHES=[['Deep slate','#2B3440'],['Ice blue','#8FB8DE'],['Persimmon','#FF6B4A'],['Warm stone','#E9E7E1'],
- ['Forest','#254A3B'],['Oxblood','#6E2439'],['Brass','#B08D57'],['Navy','#16273F'],['Lime','#C8EE72'],
- ['Teal','#2AA6A1'],['Charcoal','#333333'],['Clay','#B4674D']];
+const SWATCHES=[
+ ['Kinfolk — cream','#F1EAE0','Editorial Quarterly'],['Kinfolk — ink','#1B1B1B','Editorial Quarterly'],['Aman — sand','#C9BBA5','Editorial Quarterly'],
+ ['Arup — red','#E2001A','Structural'],['Snøhetta — steel grey','#6E7275','Structural'],['Foster + Partners — charcoal','#2B2E31','Structural'],
+ ['Red Wing — oxblood','#6E2739','Warm American'],['Garden & Gun — olive','#4B5320','Warm American'],['Aime Leon Dore — cream','#F1E9DD','Warm American'],
+ ['Aesop — amber','#6B4226','Quiet Modern'],['COS — stone','#DAD5CB','Quiet Modern'],['Jil Sander — black','#111111','Quiet Modern'],
+ ['USGS maps — contour brown','#8B4513','Field Notes'],['Field Notes — kraft','#8B6F47','Field Notes'],['NPS — arrowhead green','#3F4F3A','Field Notes']
+];
 
 const PAIRS=[['Polished','Plainspoken'],['Traditional','Modern'],['Quiet','Confident'],['Local','National'],
  ['Formal','Familiar'],['Serious','Warm'],['Established','New'],['Understated','Bold'],
@@ -743,50 +754,51 @@ const PAIRS=[['Polished','Plainspoken'],['Traditional','Modern'],['Quiet','Confi
 
 const BRANDREFS=[
  ['Architecture & building',[
-   ['Herzog & de Meuron','No symbol at all. Pure typographic authority and confidence in blank space.'],
-   ['Foster + Partners','A plus sign as the only mark. Engineering precision, not decoration.']]],
+   ['Herzog & de Meuron','No symbol at all. Pure typographic authority and confidence in blank space.','https://www.herzogdemeuron.com'],
+   ['Foster + Partners','A plus sign as the only mark. Engineering precision, not decoration.','https://www.fosterandpartners.com']]],
  ['Boutique hospitality',[
-   ['Aman','One word, enormous quiet, almost no colour. Confidence through restraint.'],
-   ['The Ludlow Hotel','Editorial and warm, with real photography instead of stock hotel rooms.']]],
+   ['Aman','One word, enormous quiet, almost no colour. Confidence through restraint.','https://www.aman.com'],
+   ['The Ludlow Hotel','Editorial and warm, with real photography instead of stock hotel rooms.','https://www.ludlowhotel.com']]],
  ['Law & professional services',[
-   ['Cravath, Swaine & Moore','Plain serif on old paper. Zero ornamentation, all credibility.'],
-   ['Wachtell, Lipton, Rosen & Katz','No design at all, on purpose. The absence is the brand.']]],
+   ['Cravath, Swaine & Moore','Plain serif on old paper. Zero ornamentation, all credibility.','https://www.cravath.com'],
+   ['Wachtell, Lipton, Rosen & Katz','No design at all, on purpose. The absence is the brand.','https://www.wlrk.com']]],
  ['Editorial & magazine',[
-   ['Kinfolk','Negative space and a restrained palette do the talking.'],
-   ['The Gentlewoman','Big serif headlines and real portraits, never a stock photo in sight.']]],
+   ['Kinfolk','Negative space and a restrained palette do the talking.','https://kinfolk.com'],
+   ['The Gentlewoman','Big serif headlines and real portraits, never a stock photo in sight.','https://thegentlewoman.co.uk']]],
  ['Private capital',[
-   ['General Atlantic','A clean sans wordmark on an architectural grid. No symbol needed.'],
-   ['Thrive Capital','Minimal to the point of refusal. Nothing left to prove.']]]
+   ['General Atlantic','A clean sans wordmark on an architectural grid. No symbol needed.','https://www.generalatlantic.com'],
+   ['Thrive Capital','Minimal to the point of refusal. Nothing left to prove.','https://thrivecap.com']]]
 ];
 
 const DSCALE=["No","Not really","Interesting","Yes, that's us"];
 
+const WC='https://commons.wikimedia.org/wiki/Special:FilePath/';
 const DIRECTIONS=[
  {id:'editorial',name:'Editorial Quarterly',blurb:'Warm ivory paper, quiet serif type, generous white space.',
   refs:[
-   ['Kinfolk magazine','Negative space and a restrained palette carry the whole page. Nothing shouts.'],
-   ['The Gentlewoman','Big serif headlines, real portraits, editorial pacing instead of a grid of stock photos.'],
-   ['Aman (hotels)','One word, enormous quiet, almost no colour. Confidence through restraint.']]},
+   ['Kinfolk magazine','Negative space and a restrained palette carry the whole page. Nothing shouts.',WC+'Kinfolk_magazine_logo.svg','https://kinfolk.com'],
+   ['The Gentlewoman','Big serif headlines, real portraits, editorial pacing instead of a grid of stock photos.','','https://thegentlewoman.co.uk'],
+   ['Aman (hotels)','One word, enormous quiet, almost no colour. Confidence through restraint.',WC+'Aman_Resorts_logo.svg','https://www.aman.com']]},
  {id:'structural',name:'Structural',blurb:'Dark, gridded, engineering precision. Steel felt, never spelled out.',
   refs:[
-   ['Snøhetta','Monochrome, architectural grids, and a sans wordmark that reads like signage.'],
-   ['Arup','Dense technical confidence. The design earns its precision instead of decorating it.'],
-   ['Foster + Partners','A plus sign as the only mark. Engineering precision, not decoration.']]},
+   ['Snøhetta','Monochrome, architectural grids, and a sans wordmark that reads like signage.',WC+'Sn%C3%B8hetta_logo.svg','https://snohetta.com'],
+   ['Arup','Dense technical confidence. The design earns its precision instead of decorating it.',WC+'Arup_logo.svg','https://www.arup.com'],
+   ['Foster + Partners','A plus sign as the only mark. Engineering precision, not decoration.',WC+'Foster_and_partners.svg','https://www.fosterandpartners.com']]},
  {id:'warm',name:'Warm American',blurb:'Olive and stone, confident serif, a photo doing real work.',
   refs:[
-   ['Red Wing Shoes','American craft heritage told through materials and photography, not nostalgia.'],
-   ['Garden & Gun','Regional pride made sophisticated. Warm tones, real place, no cliché.'],
-   ['Aime Leon Dore','Heritage American style shot like a lookbook, never like a catalogue.']]},
+   ['Red Wing Shoes','American craft heritage told through materials and photography, not nostalgia.','','https://www.redwingshoes.com'],
+   ['Garden & Gun','Regional pride made sophisticated. Warm tones, real place, no cliché.',WC+'Garden_%26_Gun_logo.png','https://gardenandgun.com'],
+   ['Aime Leon Dore','Heritage American style shot like a lookbook, never like a catalogue.',WC+'Aime_Leon_Dore_Logo.png','https://www.aimeleondore.com']]},
  {id:'quiet',name:'Quiet Modern',blurb:'Almost nothing. Thin type, huge margins, total restraint.',
   refs:[
-   ['Aesop','Clinical, minimal, and consistent everywhere, from packaging to the website.'],
-   ['COS','Fashion-brand restraint: thin type, huge margins, colour used like punctuation.'],
-   ['Jil Sander','The absence of ornament is the entire brand statement.']]},
+   ['Aesop','Clinical, minimal, and consistent everywhere, from packaging to the website.',WC+'Aesop_logo_2013.png','https://www.aesop.com'],
+   ['COS','Fashion-brand restraint: thin type, huge margins, colour used like punctuation.',WC+'COS_Logo.png','https://www.cosstores.com'],
+   ['Jil Sander','The absence of ornament is the entire brand statement.',WC+'Jil_Sander_logo.svg','https://www.jilsander.com']]},
  {id:'field',name:'Field Notes',blurb:'Topographic, mineral, rooted in Greene County ground.',
   refs:[
-   ['USGS topographic maps','Contour lines and survey marks as a visual language, not a background texture.'],
-   ['Field Notes (the stationery brand)','Utilitarian, American-made, printed like a tool rather than a keepsake.'],
-   ['National Park Service wayfinding','Confident type and mineral colour built for a real place, not a mood board.']]}
+   ['USGS topographic maps','Contour lines and survey marks as a visual language, not a background texture.',WC+'Topographic_map_example.png','https://www.usgs.gov'],
+   ['Field Notes (the stationery brand)','Utilitarian, American-made, printed like a tool rather than a keepsake.',WC+'Field_Notes_logo.png','https://fieldnotesbrand.com'],
+   ['National Park Service wayfinding','Confident type and mineral colour built for a real place, not a mood board.',WC+'Logo_of_the_United_States_National_Park_Service.svg','https://www.nps.gov']]}
 ];
 
 const LAUNCH=[
@@ -907,7 +919,7 @@ function renderBrandRefs(){
     const wrap=document.createElement('div'); wrap.style.marginTop=gi?'40px':'0';
     wrap.innerHTML='<div class="lbl">'+esc(g[0])+'</div>'
       +'<div class="rgrid" style="margin-top:14px">'
-      +g[1].map((r,ri)=>'<div class="card"><div class="cap">'+esc(r[0])+'</div><div class="sub">'+esc(r[1])+'</div>'+voteBox('brandref','br'+gi+'-'+ri)+'</div>').join('')
+      +g[1].map((r,ri)=>'<div class="card"><div class="cap">'+esc(r[0])+(r[2]?' <a class="reflink" href="'+esc(r[2])+'" target="_blank" rel="noopener">↗</a>':'')+'</div><div class="sub">'+esc(r[1])+'</div>'+voteBox('brandref','br'+gi+'-'+ri)+'</div>').join('')
       +'</div>';
     host.appendChild(wrap);
   });
@@ -925,7 +937,7 @@ function renderDirections(){
     wrap.innerHTML='<div class="cap" style="font-size:16px">'+esc(d.name)+'</div>'
       +'<div class="sub" style="min-height:auto;margin:4px 0 16px">'+esc(d.blurb)+'</div>'
       +'<div class="rgrid" style="margin-top:0">'
-      +d.refs.map(r=>'<div class="card"><div class="cap">'+esc(r[0])+'</div><div class="sub">'+esc(r[1])+'</div></div>').join('')
+      +d.refs.map(r=>'<div class="card refcard">'+(r[2]?'<div class="refimg"><img src="'+esc(r[2])+'" alt="'+esc(r[0])+'" loading="lazy" onerror="this.parentElement.style.display=\'none\'"></div>':'')+'<div class="cap">'+esc(r[0])+(r[3]?' <a class="reflink" href="'+esc(r[3])+'" target="_blank" rel="noopener">↗</a>':'')+'</div><div class="sub">'+esc(r[1])+'</div></div>').join('')
       +'</div>'
       +'<div class="dreact">'
       +'<div class="scale4" data-dir="'+d.id+'">'+DSCALE.map((lb,n)=>'<button data-n="'+n+'" class="'+(mine.score===n?'on':'')+'">'+esc(lb)+'</button>').join('')+'</div>'
@@ -1052,13 +1064,18 @@ function renderConcepts(){
 }
 
 function renderSw(){
-  $('#swatches').innerHTML=SWATCHES.map((s,i)=>{
+  let lastGroup=null, out='';
+  SWATCHES.forEach((s,i)=>{
+    if(s[2]!==lastGroup){ out+='<div class="swgrp">'+esc(s[2])+'</div><div class="swatches">'; lastGroup=s[2]; }
     const key='c'+i, mine=val('color',key), rows=all('color',key);
     const y=rows.filter(r=>r.value==='yes').length, n=rows.filter(r=>r.value==='no').length;
-    return `<div class="sw ${mine||''}" data-key="${key}">
+    out+=`<div class="sw ${mine||''}" data-key="${key}">
       <span class="chipc" style="background:${s[1]}"></span>
-      <div class="nm"><span>${s[0]}</span><span class="tl">${y?y+'✓':''}${n?' '+n+'✕':''}</span></div></div>`;
-  }).join('');
+      <div class="nm"><span>${esc(s[0])}</span><span class="tl">${y?y+'✓':''}${n?' '+n+'✕':''}</span></div></div>`;
+    const next=SWATCHES[i+1];
+    if(!next||next[2]!==s[2]) out+='</div>';
+  });
+  $('#swatches').innerHTML=out;
 }
 function renderPairs(){
   $('#pairs').innerHTML=PAIRS.map((p,i)=>{
