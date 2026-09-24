@@ -60,6 +60,12 @@ html.play-intro #gate.settled .hero-wordmark{top:64px;max-width:420px;transform:
   letter-spacing:.14em;text-transform:uppercase;padding:12px 24px;cursor:pointer;opacity:.55;transition:opacity .15s}
 .btn:hover{opacity:1}
 .btn.ghost{background:transparent;border-color:var(--rule);color:var(--ink2)}
+.modal-overlay{position:fixed;inset:0;background:rgba(20,22,24,.55);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px}
+.modal-box{background:var(--paper);max-width:560px;width:100%;padding:34px 34px 28px;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.modal-title{font-size:20px;color:var(--ink);font-family:var(--serif);font-style:italic}
+.modal-sub{font-size:13.5px;color:var(--ink3);margin-top:8px;line-height:1.5}
+.modal-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:20px}
+.modal-actions .btn{opacity:1}
 
 /* ---------- top bar ---------- */
 .top{background:var(--dark);color:var(--paper);position:relative;overflow:hidden}
@@ -88,6 +94,23 @@ html.play-intro #gate.settled .hero-wordmark{top:64px;max-width:420px;transform:
 .top .desc.out{opacity:0}
 .top .right{font-size:12px;color:var(--ondark3);text-align:right;line-height:1.5}
 .top .right b{color:var(--ondark1);font-weight:400}
+.topsearch{position:relative;flex:1;max-width:340px}
+.topsearch input{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:var(--paper);
+  font-family:var(--sans);font-size:13px;padding:9px 14px;box-sizing:border-box;border-radius:2px;transition:background-color .15s,border-color .15s}
+.topsearch input::placeholder{color:var(--ondark3)}
+.topsearch input:focus{outline:none;border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.13)}
+.tsresults{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--paper);border:1px solid var(--rule-soft);
+  box-shadow:0 18px 44px rgba(0,0,0,.28);max-height:380px;overflow-y:auto;z-index:250;text-align:left}
+.tsresults .tsrow{padding:11px 14px;cursor:pointer;border-top:1px solid var(--rule-soft)}
+.tsresults .tsrow:first-child{border-top:0}
+.tsresults .tsrow:hover{background:var(--paper2)}
+.tsresults .tsg{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--brass)}
+.tsresults .tst{font-size:14px;color:var(--ink);margin-top:2px;line-height:1.4}
+.tsresults .tsempty{padding:14px;font-size:13px;color:var(--ink3)}
+@media (max-width:820px){
+  .top .wrap{flex-wrap:wrap}
+  .topsearch{order:3;flex:1 1 100%;max-width:none;margin-top:4px}
+}
 
 /* ---------- focus strip ---------- */
 .room{background:var(--paper);border-bottom:1px solid var(--rule)}
@@ -471,6 +494,10 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
 
 <div class="top" id="topbar"><div class="cur a"></div><div class="cur b"></div><div class="cur c"></div><div class="wrap">
   <div class="left"><span class="nm">Casteel</span><span class="desc" id="desc">Wealth Management</span></div>
+  <div class="topsearch" id="topSearchWrap">
+    <input type="text" id="topSearch" placeholder="Search questions, topics, decisions…" autocomplete="off" name="wr-search">
+    <div class="tsresults" id="tsResults" style="display:none"></div>
+  </div>
   <div class="right"><b id="topWho">&nbsp;</b><br><span id="topDays"></span></div>
 </div></div>
 
@@ -666,7 +693,7 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
       <div class="sub">Every answer, note, vote, and open item in this room, as one plain-text file. Download it, then hand it to Claude to read through and work with.</div>
       <a class="link" id="lnkExport" style="cursor:pointer">Download export</a></div>
     <div class="card"><div class="cap">The Thinking Behind Casteel</div>
-      <div class="sub">Josh's own brand notes &mdash; mission, vision, ideal client, positioning, tagline candidates. The go-to reference for a lot of what's in here.</div>
+      <div class="sub">Joshuah's own brand notes &mdash; mission, vision, ideal client, positioning, tagline candidates. The go-to reference for a lot of what's in here.</div>
       <a class="link" href="casteel-brand-thinking.pdf" target="_blank" rel="noopener">Open PDF</a></div>
     <div class="card"><div class="cap">Drop folder</div>
       <div class="sub">Logos, old print pieces, photos. Nothing needs renaming or sorting.</div>
@@ -698,6 +725,18 @@ body.edit .editbtn{background:var(--brass);border-color:var(--brass);color:#fff}
     <button id="signout">Not you?</button>
   </div>
 </div></div>
+
+<div id="noteModal" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-title">Pin a note at the top of the page</div>
+    <p class="modal-sub">Everyone sees this the moment they open the site. Leave it blank and save to remove it.</p>
+    <textarea id="noteInput" placeholder="Type a note…" style="min-height:220px;margin-top:18px"></textarea>
+    <div class="modal-actions">
+      <button id="noteCancel" class="btn ghost">Cancel</button>
+      <button id="noteSave" class="btn">Save</button>
+    </div>
+  </div>
+</div>
 
 <script type="module">
 /* =====================================================================
@@ -781,16 +820,16 @@ const HOMEWORK=[
 
 const QUESTIONS=[
  ['The business',[
-  ['Why did you buy this firm?',1,'Still open. Josh\u2019s brand doc flags the founder story as unwritten and as one of the biggest remaining differentiation opportunities \u2014 worth asking him directly.'],
-  ['What do you want to be known for in five years?',1,'Answered in Josh\u2019s brand doc: \u201cthe most trusted regional boutique financial planning firm\u2026 Growth matters. Trust matters more.\u201d'],
+  ['Why did you buy this firm?',1,'Still open. JD\u2019s brand doc flags the founder story as unwritten and as one of the biggest remaining differentiation opportunities \u2014 worth asking him directly.'],
+  ['What do you want to be known for in five years?',1,'Answered in JD\u2019s brand doc: \u201cthe most trusted regional boutique financial planning firm\u2026 Growth matters. Trust matters more.\u201d'],
   ['What would you never change about how this firm works?',1],['What does a great year look like, in numbers and in feel?',0],
   ['What part of the work do you actually enjoy most?',0],['What part would you hand off tomorrow if you could?',0],
   ['What is the hardest thing about running this firm right now?',0],['If growth stopped entirely for two years, what would break first?',0],
-  ['What does the firm do that a client could not get elsewhere?',0,'Answered in Josh\u2019s brand doc: \u201cfinancial craftsmanship\u201d and the confidence-business framing \u2014 we\u2019re not selling reports, we\u2019re selling clarity and confidence.'],
+  ['What does the firm do that a client could not get elsewhere?',0,'Answered in JD\u2019s brand doc: \u201cfinancial craftsmanship\u201d and the confidence-business framing \u2014 we\u2019re not selling reports, we\u2019re selling clarity and confidence.'],
   ['What do you charge for that clients most often question?',0]]],
  ['The clients',[
-  ['Describe your favorite client without naming them.',1,'Partially answered \u2014 the teacher-and-carpenter story in Josh\u2019s brand doc.'],
-  ['What do clients actually say when they refer you to someone?',1,'Adjacent, not direct \u2014 Josh\u2019s doc lists what clients thank them for instead: reassurance, clarity, confidence, stability.'],
+  ['Describe your favorite client without naming them.',1,'Partially answered \u2014 the teacher-and-carpenter story in JD\u2019s brand doc.'],
+  ['What do clients actually say when they refer you to someone?',1,'Adjacent, not direct \u2014 JD\u2019s doc lists what clients thank them for instead: reassurance, clarity, confidence, stability.'],
   ['What do new clients usually get wrong about what you do?',0],
   ['What is the moment a prospect decides to trust you?',0],['Who have you turned away, and why?',0],
   ['Which client would you be most upset to lose, and what would cause it?',0],['What do your clients worry about at 2am?',0],
@@ -806,7 +845,7 @@ const QUESTIONS=[
  ['The name and the brand',[['When you say Casteel out loud, what does it sound like to you?',0],
   ['What should someone feel in the first ten seconds on the website?',0],['What is the wrong impression to give?',0],
   ['Should the brand feel local, regional, or neither?',0],
-  ['What of the Milinovich history matters enough to carry forward?',1,'Partially answered — Josh’s doc roots the story in family ties to ironworking, coal mining, and the gas industry in southwestern PA, though it doesn’t address the Milinovich name specifically.'],
+  ['What of the Milinovich history matters enough to carry forward?',1,'Partially answered — JD’s doc roots the story in family ties to ironworking, coal mining, and the gas industry in southwestern PA, though it doesn’t address the Milinovich name specifically.'],
   ['Is there anything you would be embarrassed to put in front of a client?',0]]],
  ['The team and the future',[['What are you best at that nobody sees?',0],['What does each person here do that clients love?',0],
   ['Who is going to run this firm in twenty years?',0],['What would you want a new hire to understand in week one?',0],
@@ -1253,7 +1292,7 @@ function renderNotice(){
   const n=shared('notice','top')||'';
   const bar=$('#notice');
   if(n){bar.style.display='block'; $('#noticeTx').innerHTML='<b>From Heidi</b>'+esc(n);}
-  else if(EDIT){bar.style.display='block'; $('#noticeTx').innerHTML='<b>From Heidi</b><span style="color:var(--ink3)">No note pinned. Tap Post a note below.</span>';}
+  else if(EDIT){bar.style.display='block'; $('#noticeTx').innerHTML='<b>From Heidi</b><span style="color:var(--ink3)">No note pinned yet. </span><button data-addnote style="border:0;background:transparent;color:var(--brass);text-decoration:underline;cursor:pointer;font:inherit;padding:0">Add one</button>';}
   else bar.style.display='none';
 }
 function timeAgo(t){
@@ -1390,7 +1429,7 @@ function renderActivity(){
 }
 
 const KIND_TAB={answer:'p2',check:'p2',status:'p6',item:'p6',decide:'p4','dec-done':'p4',
-  topic:'p1','t-done':'p1',name:'p4',color:'p4',pair:'p4',concept:'p4',comment:'p0'};
+  topic:'p1','t-done':'p1',name:'p4',color:'p4',pair:'p4',concept:'p4',comment:'p0',direction:'p7'};
 function flashHighlight(el){
   if(!el) return;
   el.style.transition='none';
@@ -1422,6 +1461,44 @@ function jumpToActivity(key,kind){
   }
   goTab(tabFallback);
 }
+
+function buildSearchIndex(){
+  const idx=[];
+  QUESTIONS.forEach((g,gi)=>g[1].forEach((q,qi)=>idx.push({t:q[0],key:'q'+gi+'-'+qi,kind:'answer',g:'Discovery — '+g[0]})));
+  HOMEWORK.forEach((t,ti)=>t[4].forEach((item,ii)=>idx.push({t:item,key:'hw'+ti+'-'+ii,kind:'check',g:'Homework — '+t[2]})));
+  TOPICS.forEach((t,i)=>idx.push({t:t,key:'T'+i,kind:'topic',g:'Plan — topics for the 25th'}));
+  DECISIONS.forEach((t,i)=>idx.push({t:t[0],key:'D'+i,kind:'decide',g:'Decide — decisions'}));
+  LAUNCH.forEach((g,gi)=>g[1].forEach((lb,i)=>idx.push({t:lb,key:'L'+gi+'-'+i,kind:'item',g:'Build — '+g[0]})));
+  NAMES.forEach(n=>idx.push({t:n[0],key:null,kind:'name',g:'Decide — names'}));
+  SWATCHES.forEach(s=>idx.push({t:s[0],key:null,kind:'color',g:'Decide — colours'}));
+  DIRECTIONS.forEach(d=>idx.push({t:d.name,key:null,kind:'direction',g:'Directions'}));
+  return idx;
+}
+const SEARCH_INDEX=buildSearchIndex();
+function renderSearchResults(qstr){
+  const box=$('#tsResults');
+  const q=qstr.trim().toLowerCase();
+  if(!q){ box.style.display='none'; box.innerHTML=''; return; }
+  const all=SEARCH_INDEX.filter(r=>r.t.toLowerCase().includes(q));
+  const matches=all.slice(0,30);
+  box.innerHTML = matches.length
+    ? matches.map(r=>'<div class="tsrow" data-tskey="'+esc(r.key||'')+'" data-tskind="'+esc(r.kind)+'">'
+        +'<div class="tsg">'+esc(r.g)+'</div><div class="tst">'+esc(r.t)+'</div></div>').join('')
+        +(all.length>30?'<div class="tsempty">'+(all.length-30)+' more, keep typing to narrow it down.</div>':'')
+    : '<div class="tsempty">Nothing matches yet.</div>';
+  box.style.display='block';
+}
+$('#topSearch').addEventListener('input',e=>renderSearchResults(e.target.value));
+$('#topSearch').addEventListener('focus',e=>{ if(e.target.value.trim()) renderSearchResults(e.target.value); });
+$('#tsResults').addEventListener('click',e=>{
+  const row=e.target.closest('.tsrow[data-tskind]');
+  if(!row) return;
+  jumpToActivity(row.dataset.tskey||null,row.dataset.tskind);
+  $('#topSearch').value=''; $('#tsResults').style.display='none'; $('#tsResults').innerHTML='';
+});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#topSearchWrap')) { $('#tsResults').style.display='none'; }
+});
 $('#actList').addEventListener('click',e=>{
   const row=e.target.closest('.row[data-jumpkey]');
   if(!row) return;
@@ -1637,10 +1714,10 @@ document.addEventListener('click',e=>{
   if(dr){const [kind,key,author]=dr.dataset.delrow.split('|');
     if(confirm('Delete this for everyone?'))removeRow(kind,key,author); return;}
   if(e.target.closest('[data-clearnotice]')){putShared('notice','top',''); return;}
+  if(e.target.closest('[data-addnote]')){openNoteModal(); return;}
   if(e.target.id==='editmode'){
     EDIT=!EDIT;
-    if(EDIT){const n=prompt('Pin a note at the top of the page for everyone (leave blank for none):',shared('notice','top')||'');
-      if(n!==null)putShared('notice','top',n.trim());}
+    if(EDIT) openNoteModal();
     render(); return;}
   const sb=e.target.closest('[data-send]');
   if(sb){const inp=document.querySelector(`[data-cm="${sb.dataset.send}"]`);
@@ -1695,6 +1772,18 @@ $$('.tab').forEach(t=>t.onclick=()=>goTab(t.dataset.p));
 $$('.fstat').forEach(el=>el.onclick=()=>goTab(el.dataset.goto));
 $('#signout').onclick=()=>{localStorage.removeItem('casteel-me');location.reload();};
 $('#lnkExport').onclick=downloadExport;
+
+function openNoteModal(){
+  const modal=$('#noteModal'), ta=$('#noteInput');
+  ta.value=shared('notice','top')||'';
+  modal.style.display='flex';
+  setTimeout(()=>ta.focus(),0);
+}
+function closeNoteModal(){ $('#noteModal').style.display='none'; }
+$('#noteSave').onclick=()=>{ putShared('notice','top',$('#noteInput').value.trim()); closeNoteModal(); };
+$('#noteCancel').onclick=closeNoteModal;
+$('#noteModal').addEventListener('click',e=>{ if(e.target.id==='noteModal') closeNoteModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#noteModal').style.display!=='none') closeNoteModal(); });
 
 /* gate */
 const gw=$('#gateWho');
